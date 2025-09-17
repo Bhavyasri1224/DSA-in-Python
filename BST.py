@@ -1,0 +1,118 @@
+BST (CREATION, INSERTION,SEARCH,TRAVESEL,HEIGHT, LEVEL ORDER TRAVESEL, TOP VIEW)
+
+class Node:
+    def __init__(self, data):
+        self.left = None
+        self.data = data
+        self.right = None
+        self.level = None
+
+class Tree:
+    def create(self, data):
+        return Node(data)
+
+    def insert(self, node, data):
+        if node is None:
+            return self.create(data)
+        if data < node.data:
+            node.left = self.insert(node.left, data)
+        else:
+            node.right = self.insert(node.right, data)
+        return node
+
+    def display(self, root):
+        if root is not None:
+            self.display(root.left)
+            print(root.data, end=" ")
+            self.display(root.right)
+
+    def preorder(self, root):
+        if root is not None:
+            print(root.data, end=" ")
+            self.preorder(root.left)
+            self.preorder(root.right)
+
+    def postorder(self, root):
+        if root is not None:
+            self.postorder(root.left)
+            self.postorder(root.right)
+            print(root.data, end=" ")
+
+    def search(self, root, key):
+        if root is None or root.data == key:
+            return root
+        if key < root.data:
+            return self.search(root.left, key)
+        return self.search(root.right, key)
+    
+    def height(self, root):
+        if root is None:
+            return -1
+        return max(self.height(root.left), self.height(root.right)) + 1
+    
+    def level_order(self, root):
+        q = []
+        q.append(root)
+        while len(q) != 0:
+            root = q.pop(0)
+            print(root.data,end=" ")
+            if root.left is not None:
+                q.append(root.left)
+            if root.right is not None:
+                q.append(root.right)
+                
+    def top_view(self,root):
+        q = []
+        d = dict()
+        root.level = 0
+        q.append(root)
+        while len(q) != 0:
+            root = q.pop(0)
+            if root.level not in d:
+                d[root.level] = root.data
+            if root.left is not None:
+                q.append(root.left)
+                root.left.level = root.level - 1
+            if root.right is not None:
+                q.append(root.right)
+                root.right.level = root.level + 1
+        print(*d.values()) 
+        s = sorted(d.values())
+        print(*s)
+
+T1 = Tree()
+root = T1.create(30)
+T1.insert(root, 15)
+T1.insert(root, 20)
+T1.insert(root, 10)
+T1.insert(root, 50)
+T1.insert(root, 60)
+T1.insert(root, 40)
+T1.insert(root, 70)
+
+
+print("In-Order")
+T1.display(root)
+
+print("\nPre-Order")
+T1.preorder(root)
+
+print("\nPost-Order")
+T1.postorder(root)
+print("\n")
+
+k = 20
+result = T1.search(root, k)
+if result:
+    print(f"\n{k} is found in the tree.")
+else:
+    print(f"\n{k} is not found in the tree.")
+
+print("\nHeight")
+print(T1.height(root))
+
+print("\nLevel-Order")
+T1.level_order(root)
+
+print("\nTop View")
+T1.top_view(root)
